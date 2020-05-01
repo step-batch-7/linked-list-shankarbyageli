@@ -3,7 +3,7 @@
 
 void print_main_menu(void);
 int get_input(char *);
-Status perform_operation(List_ptr, char);
+Status exec_operation(List_ptr, char);
 char get_user_choice(void);
 
 void print_main_menu() {
@@ -11,7 +11,7 @@ void print_main_menu() {
   printf("(a) add a number to the end of the list\n");
   printf("(b) add a number to the start of the list\n");
   printf("(c) insert a number at a given position in the list\n");
-  printf("(d) add a unique item on the list at the end(if it already exists, do not insert\n");
+  printf("(d) add a unique item on the list at the end (if it already exists, do not insert)\n");
   printf("(e) remove a number from the beginning of the list\n");
   printf("(f) remove a number from the end of the list\n");
   printf("(g) remove a number from a given position in the list\n");
@@ -30,7 +30,7 @@ int get_input(char *question) {
   return input;
 }
 
-Status perform_operation(List_ptr list, char choice) {
+Status exec_operation(List_ptr list, char choice) {
   int value, position;
   switch(choice) {
     case 'a':
@@ -67,6 +67,9 @@ Status perform_operation(List_ptr list, char choice) {
     case 'l':
       display(list);
       return Success;
+    default:
+      printf("Invalid option!\n");
+      return Success;
   }
 }
 
@@ -83,7 +86,7 @@ int main(void) {
   print_main_menu();
   char choice = get_user_choice();
   while(choice != 'm') {
-    Status status = perform_operation(list, choice);
+    Status status = exec_operation(list, choice);
     if(!status) printf("Operation failed!\n");
     print_main_menu();
     choice = get_user_choice();

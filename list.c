@@ -19,7 +19,7 @@ Status add_to_end(List_ptr list, int value) {
 }
 
 Status insert_at(List_ptr list, int value, int position) {
-  if(position < 0 || position > list->count + 1) {
+  if(position <= 0 || position > list->count + 1) {
     return Failure;
   }
   if(position == 1) {
@@ -38,7 +38,10 @@ Status insert_at(List_ptr list, int value, int position) {
 } 
 
 Status add_unique(List_ptr list, int value) {
-
+  if(!does_exist(list, value)) {
+    return add_to_end(list, value);
+  }
+  return Failure;
 }
 
 Status remove_from_start(List_ptr list) {
@@ -62,7 +65,14 @@ Status remove_all_occurrences(List_ptr list, int value) {
 }
 
 Status does_exist(List_ptr list, int value) {
-
+  Node_ptr p_Walk = list->head;
+  while(p_Walk != NULL) {
+    if(p_Walk->value == value) {
+      return Success;
+    }
+    p_Walk = p_Walk->next;
+  }
+  return Failure;
 }
 
 Status clear_list(List_ptr list) {
