@@ -168,12 +168,12 @@ Status remove_all_occurrences(List_ptr list, int value) {
         } else {
           previous_node->next = p_Walk->next;
         }
-        p_Walk = p_Walk->next;
+        p_Walk = previous_node;
         free(node_to_free);
         list->count--;
-        status = Success;
-        position--;
       }
+      status = Success;
+      position--;
     }
     previous_node = p_Walk;
     p_Walk = p_Walk->next;
