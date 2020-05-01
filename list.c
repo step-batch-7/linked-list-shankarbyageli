@@ -4,9 +4,6 @@
 
 Status add_to_start(List_ptr list, int value) {
   Node_ptr new_node = create_node(value);
-  if(new_node == NULL) {
-    return Failure;
-  }
   if(list->head == NULL) {
     list->last = new_node;
   } else {
@@ -19,9 +16,6 @@ Status add_to_start(List_ptr list, int value) {
 
 Status add_to_end(List_ptr list, int value) {
   Node_ptr new_node = create_node(value);
-  if(new_node == NULL) {
-    return Failure;
-  }
   if(list->last == NULL) {
     list->head = new_node;
   } else {
@@ -43,9 +37,6 @@ Status insert_at(List_ptr list, int value, int position) {
     return add_to_end(list, value);
   }
   Node_ptr new_node = create_node(value);
-  if(new_node == NULL) {
-    return Failure;
-  }
   Node_ptr p_Walk = list->head;
   while(position != 2) {
     p_Walk = p_Walk->next;
@@ -187,7 +178,7 @@ Status clear_list(List_ptr list) {
 
 void display(List_ptr list) {
   Node_ptr p_Walk = list->head;
-  printf("%d %s in list: \n", list->count, list->count > 1 ? "numbers" : "number");
+  printf("No. of values in the list: %d\n", list->count);
   while(p_Walk != NULL) {
     printf("%d\n", p_Walk->value);
     p_Walk = p_Walk->next;
