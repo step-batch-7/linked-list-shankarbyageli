@@ -66,19 +66,22 @@ Status add_unique(List_ptr list, int value) {
 }
 
 Status remove_from_start(List_ptr list) {
+  Node_ptr node_to_free;
   if(list->count == 1) {
     return clear_list(list);
   }
   if(list->head != NULL) {
+    node_to_free = list->head;
     list->head = list->head->next;
     list->count--;
+    free(node_to_free);
     return Success;
   }
   return Failure;
 }
 
 Status remove_from_end(List_ptr list) {
-  Node_ptr p_Walk;
+  Node_ptr p_Walk, node_to_free;
   if(list->last == NULL) {
     return Failure;
   }
@@ -91,6 +94,7 @@ Status remove_from_end(List_ptr list) {
     p_Walk = p_Walk->next;
     counter++;
   }
+  free(list->last);
   p_Walk->next = NULL;
   list->last = p_Walk;
   list->count--;
@@ -98,7 +102,7 @@ Status remove_from_end(List_ptr list) {
 }
 
 Status remove_at(List_ptr list, int position) {
-  Node_ptr p_Walk;
+  Node_ptr p_Walk, node_to_free;
   if(position <= 0 || position > list->count) {
     return Failure;
   }
@@ -113,20 +117,23 @@ Status remove_at(List_ptr list, int position) {
     p_Walk = p_Walk->next;
     position--;
   }
+  node_to_free = p_Walk->next;
   p_Walk->next = p_Walk->next->next;
   list->count--;
+  free(node_to_free);
   return Success;
 }
 
 Status remove_first_occurrence(List_ptr list, int value) {
   Node_ptr p_Walk = list->head;
-  Node_ptr previous_node = NULL;
+  Node_ptr previous_node = NULL, node_to_free = NULL;
   unsigned int position = 1;
   while(p_Walk != NULL) {
     if(p_Walk->value == value) {
       if(position == 1) {
         return remove_from_start(list);
       }
+      node_to_free = previous_node->next;
       if(position == list->count) {
         previous_node->next = NULL;
         list->last = previous_node;  
@@ -134,6 +141,7 @@ Status remove_first_occurrence(List_ptr list, int value) {
         previous_node->next = p_Walk->next;
       }
       list->count--;
+      free(node_to_free);
       return Success;
     }
     previous_node = p_Walk;
@@ -145,23 +153,26 @@ Status remove_first_occurrence(List_ptr list, int value) {
 
 Status remove_all_occurrences(List_ptr list, int value) {
   Node_ptr p_Walk = list->head;
-  Node_ptr previous_node = NULL;
+  Node_ptr previous_node = NULL, node_to_free = NULL;
   Status status = Failure;
   unsigned int position = 1;
   while(p_Walk != NULL) {
     if(p_Walk->value == value) {
       if(position == 1) {
         status = remove_from_start(list);
-      } else if(position == list->count) {
-        previous_node->next = NULL;
-        list->last = previous_node;  
-        list->count--;
       } else {
-        previous_node->next = p_Walk->next;
+        node_to_free = previous_node->next;
+        if(position == list->count) {
+          previous_node->next = NULL;
+          list->last = previous_node;
+        } else {
+          previous_node->next = p_Walk->next;
+        }
+        free(node_to_free);
         list->count--;
+        status = Success;
+        position--;
       }
-      status = Success;
-      position--;
     }
     previous_node = p_Walk;
     p_Walk = p_Walk->next;
@@ -182,8 +193,15 @@ Status does_exist(List_ptr list, int value) {
 }
 
 Status clear_list(List_ptr list) {
-  list->head = NULL;
+  Node_ptr p_Walk = list->head;
+  Node_ptr node_to_free;
+  while(p_Walk != NULL) {
+    node_to_free = p_Walk;
+    p_Walk = p_Walk->next;
+    free(node_to_free);
+  }
   list->last = NULL;
+  list->head = NULL;
   list->count = 0;
   return Success;
 }
@@ -216,12 +234,6 @@ List_ptr create_list(void) {
 }
 
 void destroy_list(List_ptr list) {
-  Node_ptr p_Walk = list->head;
-  Node_ptr node_to_free;
-  while(p_Walk != NULL) {
-    node_to_free = p_Walk;
-    p_Walk = p_Walk->next;
-    free(node_to_free);
-  }
+  clear_list(list);
   free(list);
 }
