@@ -4,6 +4,9 @@
 
 Status add_to_start(List_ptr list, int value) {
   Node_ptr new_node = create_node(value);
+  if(new_node == NULL) {
+    return Failure;
+  }
   if(list->head == NULL) {
     list->last = new_node;
   } else {
@@ -15,7 +18,18 @@ Status add_to_start(List_ptr list, int value) {
 }
 
 Status add_to_end(List_ptr list, int value) {
-  return insert_at(list, value, list->count + 1);
+  Node_ptr new_node = create_node(value);
+  if(new_node == NULL) {
+    return Failure;
+  }
+  if(list->last == NULL) {
+    list->head = new_node;
+  } else {
+    list->last->next = new_node;
+  }
+  list->last = new_node;
+  list->count++;
+  return Success;
 }
 
 Status insert_at(List_ptr list, int value, int position) {
@@ -24,8 +38,14 @@ Status insert_at(List_ptr list, int value, int position) {
   }
   if(position == 1) {
     return add_to_start(list, value);
-  } 
+  }
+  if(position == list->count + 1) {
+    return add_to_end(list, value);
+  }
   Node_ptr new_node = create_node(value);
+  if(new_node == NULL) {
+    return Failure;
+  }
   Node_ptr p_Walk = list->head;
   while(position != 2) {
     p_Walk = p_Walk->next;
@@ -45,23 +65,62 @@ Status add_unique(List_ptr list, int value) {
 }
 
 Status remove_from_start(List_ptr list) {
-
+  if(list->count == 1) {
+    return clear_list(list);
+  }
+  if(list->head != NULL) {
+    list->head = list->head->next;
+    list->count--;
+    return Success;
+  }
+  return Failure;
 }
 
 Status remove_from_end(List_ptr list) {
-
+  if(list->last == NULL) {
+    return Failure;
+  }
+  if(list->count == 1) {
+    return clear_list(list);
+  }
+  Node_ptr p_Walk = list->head;
+  unsigned int counter = 1;
+  while(counter < list->count - 1) {
+    p_Walk = p_Walk->next;
+    counter++;
+  }
+  p_Walk->next = NULL;
+  list->last = p_Walk;
+  list->count--;
+  return Success;
 }
 
 Status remove_at(List_ptr list, int position) {
-
+  if(position <= 0 || position > list->count) {
+    return Failure;
+  }
+  if(position == list->count) {
+    return remove_from_end(list);
+  }
+  if(position == 1) {
+    return remove_from_start(list);
+  }
+  Node_ptr p_Walk = list->head;
+  while(position != 2) {
+    p_Walk = p_Walk->next;
+    position--;
+  }
+  p_Walk->next = p_Walk->next->next;
+  list->count--;
+  return Success;
 }
 
 Status remove_first_occurrence(List_ptr list, int value) {
-
+  
 }
 
 Status remove_all_occurrences(List_ptr list, int value) {
-
+  
 }
 
 Status does_exist(List_ptr list, int value) {
@@ -76,7 +135,10 @@ Status does_exist(List_ptr list, int value) {
 }
 
 Status clear_list(List_ptr list) {
-
+  list->head = NULL;
+  list->last = NULL;
+  list->count = 0;
+  return Success;
 }
 
 void display(List_ptr list) {

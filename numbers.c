@@ -63,7 +63,13 @@ Status exec_operation(List_ptr list, char choice) {
       return clear_list(list);
     case 'k':
       value = get_input("Enter the value");
-      return does_exist(list, value);
+      Status s = does_exist(list, value);
+      if(s) {
+        printf("%d exist in the list\n", value);
+      } else {
+        printf("%d doesn't exist in the list\n", value);
+      }
+      return Success;
     case 'l':
       display(list);
       return Success;
