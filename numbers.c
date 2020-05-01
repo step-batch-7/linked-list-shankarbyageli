@@ -23,6 +23,14 @@ void print_main_menu() {
   printf("(m) exit\n\n");
 }
 
+void print_search_result(Status status, int value) {
+  if(status) {
+    printf("%d exist in the list\n", value);
+  } else {
+    printf("%d doesn't exist in the list\n", value);
+  }
+}
+
 int get_input(char *question) {
   int input;
   printf("%s\n", question);
@@ -64,11 +72,7 @@ Status exec_operation(List_ptr list, char choice) {
     case 'k':
       value = get_input("Enter the value");
       Status s = does_exist(list, value);
-      if(s) {
-        printf("%d exist in the list\n", value);
-      } else {
-        printf("%d doesn't exist in the list\n", value);
-      }
+      print_search_result(s, value);
       return Success;
     case 'l':
       display(list);
@@ -93,7 +97,9 @@ int main(void) {
   char choice = get_user_choice();
   while(choice != 'm') {
     Status status = exec_operation(list, choice);
-    if(!status) printf("Operation failed!\n");
+    if(!status) {
+      printf("Operation failed!\n");
+    }
     print_main_menu();
     choice = get_user_choice();
   }

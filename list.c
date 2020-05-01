@@ -116,11 +116,55 @@ Status remove_at(List_ptr list, int position) {
 }
 
 Status remove_first_occurrence(List_ptr list, int value) {
-  
+  Node_ptr p_Walk = list->head;
+  Node_ptr previous_node = NULL;
+  unsigned int position = 1;
+  while(p_Walk != NULL) {
+    if(p_Walk->value == value) {
+      if(position == 1) {
+        return remove_from_start(list);
+      }
+      if(position == list->count) {
+        previous_node->next = NULL;
+        list->last = previous_node;  
+      } else {
+        previous_node->next = p_Walk->next;
+      }
+      list->count--;
+      return Success;
+    }
+    previous_node = p_Walk;
+    p_Walk = p_Walk->next;
+    position++;
+  }
+  return Failure;
 }
 
 Status remove_all_occurrences(List_ptr list, int value) {
-  
+  Node_ptr p_Walk = list->head;
+  Node_ptr previous_node = NULL;
+  Status status = Failure;
+  unsigned int position = 1;
+  while(p_Walk != NULL) {
+    if(p_Walk->value == value) {
+      if(position == 1) {
+        status = remove_from_start(list);
+      } else if(position == list->count) {
+        previous_node->next = NULL;
+        list->last = previous_node;  
+        list->count--;
+      } else {
+        previous_node->next = p_Walk->next;
+        list->count--;
+      }
+      status = Success;
+      position--;
+    }
+    previous_node = p_Walk;
+    p_Walk = p_Walk->next;
+    position++;
+  }
+  return status;  
 }
 
 Status does_exist(List_ptr list, int value) {
