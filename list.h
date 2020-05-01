@@ -11,7 +11,7 @@ typedef struct node {
   struct node *next;
 } Node;
 
-typedef Node * Node_ptr;
+typedef Node *Node_ptr;
 
 typedef struct {
   Node *head;
@@ -19,9 +19,10 @@ typedef struct {
   int count;
 } List;
 
-typedef List * List_ptr;
+typedef List *List_ptr;
 
 List_ptr create_list(void);
+Node_ptr create_node(int value);
 
 Status add_to_end(List_ptr list, int value);
 Status add_to_start(List_ptr list, int value);

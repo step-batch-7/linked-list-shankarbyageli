@@ -88,5 +88,6 @@ int main(void) {
     print_main_menu();
     choice = get_user_choice();
   }
+  destroy_list(list);
   return 0;
 }
