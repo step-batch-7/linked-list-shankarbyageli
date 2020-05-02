@@ -93,6 +93,10 @@ char get_user_choice() {
 
 int main(void) {
   List_ptr list = create_list();
+  if(list == NULL) {
+    printf("Memory allocation failed!\n");
+    return 0;
+  }
   print_main_menu();
   char choice = get_user_choice();
   while(choice != 'm') {

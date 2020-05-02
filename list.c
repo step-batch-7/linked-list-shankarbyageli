@@ -125,16 +125,14 @@ Status remove_at(List_ptr list, int position) {
 }
 
 Status remove_first_occurrence(List_ptr list, int value) {
-  Node_ptr p_Walk = list->head;
-  Node_ptr previous_node = NULL, node_to_free = NULL;
-  unsigned int position = 1;
+  Node_ptr p_Walk = list->head, previous_node, node_to_free;
   while(p_Walk != NULL) {
     if(p_Walk->value == value) {
-      if(position == 1) {
+      if(p_Walk == list->head) {
         return remove_from_start(list);
       }
       node_to_free = previous_node->next;
-      if(position == list->count) {
+      if(p_Walk == list->last) {
         previous_node->next = NULL;
         list->last = previous_node;  
       } else {
@@ -146,23 +144,20 @@ Status remove_first_occurrence(List_ptr list, int value) {
     }
     previous_node = p_Walk;
     p_Walk = p_Walk->next;
-    position++;
   }
   return Failure;
 }
 
 Status remove_all_occurrences(List_ptr list, int value) {
-  Node_ptr p_Walk = list->head;
-  Node_ptr previous_node = NULL, node_to_free = NULL;
+  Node_ptr p_Walk = list->head, previous_node, node_to_free;
   Status status = Failure;
-  unsigned int position = 1;
   while(p_Walk != NULL) {
     if(p_Walk->value == value) {
-      if(position == 1) {
+      if(p_Walk == list->head) {
         status = remove_from_start(list);
       } else {
         node_to_free = previous_node->next;
-        if(position == list->count) {
+        if(p_Walk == list->last) {
           previous_node->next = NULL;
           list->last = previous_node;
         } else {
@@ -173,11 +168,9 @@ Status remove_all_occurrences(List_ptr list, int value) {
         list->count--;
       }
       status = Success;
-      position--;
     }
     previous_node = p_Walk;
     p_Walk = p_Walk->next;
-    position++;
   }
   return status;  
 }
@@ -228,6 +221,9 @@ Node_ptr create_node(int value) {
 
 List_ptr create_list(void) {
   List_ptr empty_list = malloc(sizeof(List));
+  if(empty_list == NULL) {
+    return NULL;
+  }
   empty_list->head = NULL;
   empty_list->last = NULL;
   empty_list->count = 0;
