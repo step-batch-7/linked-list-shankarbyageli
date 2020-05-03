@@ -66,18 +66,18 @@ Status add_unique(List_ptr list, int value) {
 }
 
 Status remove_from_start(List_ptr list) {
-  Node_ptr node_to_free;
+  Node_ptr node_to_free = NULL;
+  if(list->head == NULL) {
+    return Failure;
+  }
+  node_to_free = list->head;
   if(list->count == 1) {
-    return clear_list(list);
+    list->last = NULL;
   }
-  if(list->head != NULL) {
-    node_to_free = list->head;
-    list->head = list->head->next;
-    list->count--;
-    free(node_to_free);
-    return Success;
-  }
-  return Failure;
+  list->head = list->head->next;
+  free(node_to_free);
+  list->count--;
+  return Success;
 }
 
 Status remove_from_end(List_ptr list) {
