@@ -3,8 +3,10 @@
 
 void print_main_menu(void);
 int get_input(char *);
-Status exec_operation(List_ptr, char);
+void exec_operation(List_ptr, char);
 char get_user_choice(void);
+void print_search_result(Status, int);
+void print_operation_status(Status);
 
 void print_main_menu() {
   printf("\nMain menu\n-----------\n");
@@ -31,6 +33,14 @@ void print_search_result(Status status, int value) {
   }
 }
 
+void print_operation_status(Status status) {
+  if(status) {
+    printf("Operation Completed!\n");
+  } else {
+    printf("Operaion Failed!\n");
+  }
+}
+
 int get_input(char *question) {
   int input;
   printf("%s\n", question);
@@ -38,49 +48,61 @@ int get_input(char *question) {
   return input;
 }
 
-Status exec_operation(List_ptr list, char choice) {
+void exec_operation(List_ptr list, char choice) {
   int value, position;
+  Status status;
   switch(choice) {
     case 'a':
       value = get_input("Enter the value");
-      return add_to_end(list, value);
+      status = add_to_end(list, value);
+      break;
     case 'b':
       value = get_input("Enter the value");
-      return add_to_start(list, value);
+      status = add_to_start(list, value);
+      break;
     case 'c':
       value = get_input("Enter the value");
       position = get_input("Enter the position");
-      return insert_at(list, value, position);
+      status = insert_at(list, value, position);
+      break;
     case 'd':
       value = get_input("Enter the value");
-      return add_unique(list, value);
+      status = add_unique(list, value);
+      break;
     case 'e':
-      return remove_from_start(list);
+      status = remove_from_start(list);
+      break;
     case 'f':
-      return remove_from_end(list);
+      status = remove_from_end(list);
+      break;
     case 'g':
       position = get_input("Enter the position");
-      return remove_at(list, position);
+      status = remove_at(list, position);
+      break;
     case 'h':
       value = get_input("Enter the value");
-      return remove_first_occurrence(list, value);
+      status = remove_first_occurrence(list, value);
+      break;
     case 'i':
       value = get_input("Enter the value");
-      return remove_all_occurrences(list, value);
+      status = remove_all_occurrences(list, value);
+      break;
     case 'j':
-      return clear_list(list);
+      status = clear_list(list);
+      break;
     case 'k':
       value = get_input("Enter the value");
       Status s = does_exist(list, value);
       print_search_result(s, value);
-      return Success;
+      return;
     case 'l':
       display(list);
-      return Success;
+      return;
     default:
       printf("Invalid option!\n");
-      return Success;
+      return;
   }
+  print_operation_status(status);
 }
 
 char get_user_choice() {
@@ -100,10 +122,7 @@ int main(void) {
   print_main_menu();
   char choice = get_user_choice();
   while(choice != 'm') {
-    Status status = exec_operation(list, choice);
-    if(!status) {
-      printf("Operation failed!\n");
-    }
+    exec_operation(list, choice);
     print_main_menu();
     choice = get_user_choice();
   }

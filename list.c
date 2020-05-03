@@ -89,10 +89,8 @@ Status remove_from_end(List_ptr list) {
     return clear_list(list);
   }
   p_Walk = list->head;
-  unsigned int counter = 1;
-  while(counter < list->count - 1) {
+  while(p_Walk->next != list->last) {
     p_Walk = p_Walk->next;
-    counter++;
   }
   free(list->last);
   p_Walk->next = NULL;
