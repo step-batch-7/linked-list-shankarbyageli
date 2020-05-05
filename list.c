@@ -34,13 +34,13 @@ Status add_to_end(List_ptr list, int value) {
 
 Status insert_at(List_ptr list, int value, int position) {
   Node_ptr new_node, p_Walk;
-  if(position <= 0 || position > list->count + 1) {
+  if(position < 0 || position > list->count) {
     return Failure;
   }
-  if(position == 1) {
+  if(position == 0) {
     return add_to_start(list, value);
   }
-  if(position == list->count + 1) {
+  if(position == list->count) {
     return add_to_end(list, value);
   }
   new_node = create_node(value);
@@ -48,7 +48,7 @@ Status insert_at(List_ptr list, int value, int position) {
     return Failure;
   }
   p_Walk = list->head;
-  while(position != 2) {
+  while(position != 1) {
     p_Walk = p_Walk->next;
     position--;
   }
@@ -101,17 +101,17 @@ Status remove_from_end(List_ptr list) {
 
 Status remove_at(List_ptr list, int position) {
   Node_ptr p_Walk, node_to_free;
-  if(position <= 0 || position > list->count) {
+  if(position < 0 || position >= list->count) {
     return Failure;
   }
-  if(position == list->count) {
+  if(position == list->count - 1) {
     return remove_from_end(list);
   }
-  if(position == 1) {
+  if(position == 0) {
     return remove_from_start(list);
   }
   p_Walk = list->head;
-  while(position != 2) {
+  while(position != 1) {
     p_Walk = p_Walk->next;
     position--;
   }
