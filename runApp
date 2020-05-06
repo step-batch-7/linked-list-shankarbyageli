@@ -1,5 +1,5 @@
 #! /bin/bash
 
-gcc src/*.c
+gcc *.c
 ./a.out
 rm a.out

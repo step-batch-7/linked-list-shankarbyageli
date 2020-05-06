@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include "../testLib/mocha.h"
-#include "../src/list.h"
+#include "../list.h"
 
 __testStatus add_to_end_in_empty_list() {
   List_ptr list = create_list();

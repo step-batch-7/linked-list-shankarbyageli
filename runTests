@@ -1,5 +1,5 @@
 #! /bin/bash
 
-gcc test/test_linked_list.c testLib/mocha.c src/list.c 
+gcc test/test_linked_list.c testLib/mocha.c list.c 
 ./a.out
 rm a.out
