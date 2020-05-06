@@ -1,7 +1,5 @@
 #! /bin/bash
 
-for i in test/*; do
-  gcc $i
-  ./a.out
-done
+gcc test/test_linked_list.c testLib/mocha.c src/list.c 
+./a.out
 rm a.out

@@ -1,9 +1,5 @@
 #include<stdio.h>
-
-typedef enum {
-  __Failure,
-  __Success
-} __testStatus;
+#include "mocha.h"
 
 void describe(char *message) {
   static int desc_counter = 1;
