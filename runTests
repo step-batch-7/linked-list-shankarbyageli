@@ -1,0 +1,7 @@
+#! /bin/bash
+
+for i in test/*; do
+  gcc $i
+  ./a.out
+done
+rm a.out

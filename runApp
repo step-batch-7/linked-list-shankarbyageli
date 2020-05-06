@@ -1,0 +1,5 @@
+#! /bin/bash
+
+gcc src/*.c
+./a.out
+rm a.out
